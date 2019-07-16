@@ -41,11 +41,16 @@ const ContentDesc = styled.span`
 
 const Card = props => {
   return (
-    <CardWrapper href={props.arcticle.url}>
-      <img src={props.arcticle.urlToImage} alt="img" />
+    <CardWrapper
+      href={props.article.url}
+      onClick={() => props.addHistory(props.article)}
+      target="_blank" 
+      rel="noopener noreferrer"
+    >
+      <img src={props.article.urlToImage} alt="img" />
       <CardContent>
-        <ContentTitle>{props.arcticle.title}</ContentTitle>
-        <ContentDesc>{props.arcticle.description}</ContentDesc>
+        <ContentTitle>{props.article.title}</ContentTitle>
+        <ContentDesc>{props.article.description}</ContentDesc>
       </CardContent>
     </CardWrapper>
   )

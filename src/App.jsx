@@ -11,7 +11,7 @@ const AppWrapper = styled.div`
 `
 
 const NavBar = styled.div`
-
+  margin-bottom: 20px;
 `
 
 const BodyWrapper = styled.div`

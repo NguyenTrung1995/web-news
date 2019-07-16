@@ -2,7 +2,7 @@ import { FETCH_NEWS } from './actionTypes';
 
 const url = "https://newsapi.org/v2/everything?domains=cnn.com,nytimes.com&apiKey=cc4128d9911c4568bab94d7e1d59e2d6";
 
-export const fetchNewsAC = news => ({
+const fetchNewsAC = news => ({
   type: FETCH_NEWS,
   news
 })
