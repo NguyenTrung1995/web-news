@@ -12,6 +12,15 @@ const AppWrapper = styled.div`
 
 const NavBar = styled.div`
   margin-bottom: 20px;
+
+  & > a {
+    text-decoration: none;
+    margin-right: 10px;
+    background: black;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 10px;
+  }
 `
 
 const BodyWrapper = styled.div`
