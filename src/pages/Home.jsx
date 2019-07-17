@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { addHistory } from "../actions";
 import styled from 'styled-components';
 import request from "superagent";
+import { throttle } from 'lodash';
 
 const Input = styled.input`
   border: none;
@@ -21,7 +22,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchValue: '',
+      isSearching: false,
       searchResult: [],
       hasMore: true,
       isLoading: false,
@@ -29,6 +30,7 @@ class Home extends React.Component {
       news: [],
       initPage: 1
     }
+    this.handleInputThrottled = throttle(this.handleSearchInput, 100)
 
     window.onscroll = () => {
       const {
@@ -94,23 +96,38 @@ class Home extends React.Component {
   }
 
   handleSearchInput = e => {
-    this.setState({
-      searchValue: e.target.value
-    })
+    const value = e.target.value
+    if (value) {
+      request
+      .get(`https://newsapi.org/v2/everything?q=${encodeURI(value)}&apiKey=cc4128d9911c4568bab94d7e1d59e2d6`)
+      .then((results) => {     
+        const nextNews = results.body.articles.map(article => ({
+          title: article.title,
+          description: article.description,
+          source: article.source.name,
+          url: article.url,
+          urlToImage: article.urlToImage
+        }));
+
+        this.setState({
+          searchResult: [...nextNews],
+          isSearching: true
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          error: err.message,
+          });
+      })
+    } else {
+      this.setState({
+        isSearching: false
+      });
+    }
   }
 
   searchedList = () => {
-    const result = this.state.news.filter(article => {
-      const titleLower = article.title.toLowerCase();
-      const descLower = article.description ? article.description.toLowerCase() : '';
-      const searchValueLower = this.state.searchValue.toLowerCase();
-
-      if ((titleLower.indexOf(searchValueLower) !== -1) || (descLower.indexOf(searchValueLower) !== -1)) {
-        return true;
-      }
-      return false;
-    })
-    return result.map((x, i) => 
+    return this.state.searchResult.map((x, i) => 
       <Card key={i} article={x} addHistory={this.props.addHistory} />
     )
   }
@@ -120,17 +137,19 @@ class Home extends React.Component {
       error,
       hasMore,
       isLoading,
-      searchValue
+      isSearching
     } = this.state;
     return (
       <div>
         <Input
-          value={searchValue}
           placeholder="Search"
-          onChange={this.handleSearchInput}
+          onChange={this.handleInputThrottled}
         />
-        {!searchValue &&
+        {!isSearching &&
           this.generatorNews()
+        }
+        {isSearching &&
+          this.searchedList()
         }
         {error &&
           <div style={{ color: '#900' }}>
@@ -142,9 +161,6 @@ class Home extends React.Component {
         }
         {!hasMore &&
           <div>You did it! You reached the end!</div>
-        }
-        {searchValue &&
-          this.searchedList()
         }
       </div>
     );
