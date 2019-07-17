@@ -32,7 +32,15 @@ const NavBar = styled.div`
 `
 
 const BodyWrapper = styled.div`
+  & > div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 
+    @media only screen and (max-width: 600px) {
+      display: block;
+    }
+  }
 `
 
 class App extends Component {

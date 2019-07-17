@@ -8,6 +8,11 @@ const CardWrapper = styled.a`
   border-radius: 4px;
   text-decoration: none;
   color: #333;
+  width: 750px;
+
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+  }
 
   img {
     width: 200px;
