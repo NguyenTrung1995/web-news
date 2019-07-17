@@ -56,8 +56,21 @@ const ContentTitle = styled.span`
 
 const ContentDesc = styled.span`
   padding-bottom: 10px;
-  
+
   @media only screen and (max-width: 600px) {
+    padding-bottom: 5px;
+  }
+`
+
+const ContentSource = styled.div`
+  text-align: right;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 12px;
+    padding-right: 5px;
     padding-bottom: 5px;
   }
 `
@@ -74,6 +87,7 @@ const Card = props => {
       <CardContent>
         <ContentTitle>{props.article.title}</ContentTitle>
         <ContentDesc>{props.article.description}</ContentDesc>
+        <ContentSource>{props.article.source}</ContentSource>
       </CardContent>
     </CardWrapper>
   )
