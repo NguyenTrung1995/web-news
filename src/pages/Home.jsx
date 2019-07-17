@@ -53,8 +53,8 @@ class Home extends React.Component {
       if (error || isLoading || !hasMore) return;
 
       if (
-        window.innerHeight + document.documentElement.scrollTop
-        === document.documentElement.offsetHeight
+        window.innerHeight + window.scrollY
+        === window.document.documentElement.offsetHeight
       ) {
         loadUsers();
       }
