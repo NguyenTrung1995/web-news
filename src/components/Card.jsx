@@ -13,6 +13,10 @@ const CardWrapper = styled.a`
     width: 200px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
+
+    @media only screen and (max-width: 600px) {
+      width: 100px
+    }
   }
 `
 
@@ -21,22 +25,41 @@ const CardContent = styled.div`
   width: calc(100% - 200px);
   flex-direction: column;
 
+  @media only screen and (max-width: 600px) {
+    width: calc(100% - 100px);
+  }
+
   & > span {
     text-align: left;
     padding-left: 10px;
+
+    @media only screen and (max-width: 600px) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-left: 5px;
+      font-size: 12px;
+    } 
   }
 `
 
 const ContentTitle = styled.span`
-  padding-bottom: 10px;
+  padding: 10px 0;
   margin-bottom: 10px;
-  padding-top: 10px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #0101012e;
   font-weight: 600;
+
+  @media only screen and (max-width: 600px) {
+    padding: 5px 0;
+  }
 `
 
 const ContentDesc = styled.span`
   padding-bottom: 10px;
+  
+  @media only screen and (max-width: 600px) {
+    padding-bottom: 5px;
+  }
 `
 
 const Card = props => {

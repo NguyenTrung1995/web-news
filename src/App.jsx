@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Home from './pages/Home';
 import History from './pages/History';
 import styled from 'styled-components';
@@ -8,6 +7,10 @@ import styled from 'styled-components';
 const AppWrapper = styled.div`
   padding: 20px 100px;
   text-align: center;
+
+  @media only screen and (max-width: 600px) {
+    padding: 20px 20px;
+  }
 `
 
 const NavBar = styled.div`

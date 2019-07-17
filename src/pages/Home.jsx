@@ -44,7 +44,7 @@ class Home extends React.Component {
   searchedList = () => {
     const result = this.props.news.filter(article => {
       const titleLower = article.title.toLowerCase();
-      const descLower = article.description.toLowerCase();
+      const descLower = article.description ? article.description.toLowerCase() : '';
       const searchValueLower = this.state.searchValue.toLowerCase();
 
       if ((titleLower.indexOf(searchValueLower) !== -1) || (descLower.indexOf(searchValueLower) !== -1)) {
