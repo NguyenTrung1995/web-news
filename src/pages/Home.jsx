@@ -35,8 +35,7 @@ class Home extends React.Component {
       error: false,
       news: [],
       initPage: 1,
-      inputText: '',
-      currentUrl: ''
+      inputText: ''
     }
 
     this.handleSearchInput = debounce(this.handleSearchInput, 500);
