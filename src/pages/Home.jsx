@@ -173,8 +173,4 @@ class Home extends React.Component {
   }
 }
 
-// const mapStateToProps = state => ({
-//   news: state.news
-// })
-
 export default connect(null, { addHistory })(Home);
