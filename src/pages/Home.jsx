@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { addHistory } from "../actions";
 import styled from 'styled-components';
 import request from "superagent";
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 
 const Input = styled.input`
   border: none;
@@ -34,9 +34,12 @@ class Home extends React.Component {
       isLoading: false,
       error: false,
       news: [],
-      initPage: 1
+      initPage: 1,
+      inputText: '',
+      currentUrl: ''
     }
-    this.handleInputThrottled = throttle(this.handleSearchInput, 100)
+
+    this.handleSearchInput = debounce(this.handleSearchInput, 500);
 
     window.onscroll = () => {
       const {
@@ -101,8 +104,8 @@ class Home extends React.Component {
     )
   }
 
-  handleSearchInput = e => {
-    const value = e.target.value
+  handleSearchInput = () => {
+    const value = this.state.inputText;
     if (value) {
       request
       .get(`https://newsapi.org/v2/everything?q=${encodeURI(value)}&apiKey=cc4128d9911c4568bab94d7e1d59e2d6`)
@@ -138,6 +141,13 @@ class Home extends React.Component {
     )
   }
 
+  handleChange = e => {
+    this.setState({
+      inputText: e.target.value
+    });
+    this.handleSearchInput();
+  }
+
   render() {
     const {
       error,
@@ -148,8 +158,9 @@ class Home extends React.Component {
     return (
       <div>
         <Input
+          value={this.state.inputText}
           placeholder="Search"
-          onChange={this.handleInputThrottled}
+          onChange={this.handleChange}
         />
         {!isSearching &&
           this.generatorNews()
