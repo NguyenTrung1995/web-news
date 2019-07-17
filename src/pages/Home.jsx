@@ -1,8 +1,9 @@
 import React from 'react';
 import Card from '../components/Card';
 import { connect } from "react-redux";
-import { fetchNews, addHistory } from "../actions";
+import { addHistory } from "../actions";
 import styled from 'styled-components';
+import request from "superagent";
 
 const Input = styled.input`
   border: none;
@@ -21,16 +22,73 @@ class Home extends React.Component {
     super(props);
     this.state = {
       searchValue: '',
-      searchResult: []
+      searchResult: [],
+      hasMore: true,
+      isLoading: false,
+      error: false,
+      news: [],
+      initPage: 1
     }
+
+    window.onscroll = () => {
+      const {
+        loadUsers,
+        state: {
+          error,
+          isLoading,
+          hasMore,
+        },
+      } = this;
+
+      if (error || isLoading || !hasMore) return;
+
+      if (
+        window.innerHeight + document.documentElement.scrollTop
+        === document.documentElement.offsetHeight
+      ) {
+        loadUsers();
+      }
+    };
   }
 
-  componentDidMount() {
-    this.props.fetchNews()
+  componentWillMount() {
+    this.loadUsers();
+  }
+
+  loadUsers = () => {
+    this.setState({ isLoading: true }, () => {
+      request
+        .get(`https://newsapi.org/v2/everything?domains=cnn.com,nytimes.com&page=${this.state.initPage}&apiKey=cc4128d9911c4568bab94d7e1d59e2d6`)
+        .then((results) => {     
+          const nextNews = results.body.articles.map(article => ({
+            title: article.title,
+            description: article.description,
+            source: article.source.name,
+            url: article.url,
+            urlToImage: article.urlToImage
+          }));
+
+          this.setState({
+            hasMore: (this.state.news.length < 50),
+            isLoading: false,
+            news: [
+              ...this.state.news,
+              ...nextNews,
+            ],
+            initPage: this.state.initPage + 1
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            error: err.message,
+            isLoading: false,
+           });
+        })
+    });
   }
 
   generatorNews = () => {
-    return this.props.news.map((x, i) => 
+    return this.state.news.map((x, i) => 
       <Card key={i} article={x} addHistory={this.props.addHistory} />
     )
   }
@@ -42,7 +100,7 @@ class Home extends React.Component {
   }
 
   searchedList = () => {
-    const result = this.props.news.filter(article => {
+    const result = this.state.news.filter(article => {
       const titleLower = article.title.toLowerCase();
       const descLower = article.description ? article.description.toLowerCase() : '';
       const searchValueLower = this.state.searchValue.toLowerCase();
@@ -58,7 +116,12 @@ class Home extends React.Component {
   }
 
   render() {
-    const { searchValue } = this.state;
+    const {
+      error,
+      hasMore,
+      isLoading,
+      searchValue
+    } = this.state;
     return (
       <div>
         <Input
@@ -69,6 +132,17 @@ class Home extends React.Component {
         {!searchValue &&
           this.generatorNews()
         }
+        {error &&
+          <div style={{ color: '#900' }}>
+            {error}
+          </div>
+        }
+        {isLoading &&
+          <div>Loading...</div>
+        }
+        {!hasMore &&
+          <div>You did it! You reached the end!</div>
+        }
         {searchValue &&
           this.searchedList()
         }
@@ -77,8 +151,8 @@ class Home extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  news: state.news
-})
+// const mapStateToProps = state => ({
+//   news: state.news
+// })
 
-export default connect(mapStateToProps, { fetchNews, addHistory })(Home);
+export default connect(null, { addHistory })(Home);
