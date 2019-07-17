@@ -148,12 +148,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const {
-      error,
-      hasMore,
-      isLoading,
-      isSearching
-    } = this.state;
+    const { error, hasMore, isLoading, isSearching } = this.state;
     return (
       <div>
         <Input
