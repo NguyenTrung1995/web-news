@@ -19,10 +19,15 @@ const NavBar = styled.div`
   & > a {
     text-decoration: none;
     margin-right: 10px;
-    background: black;
-    color: white;
+    background: #1e577b;
+    color: #fff;
     border-radius: 4px;
     padding: 4px 10px;
+    transition: all 0.5s;
+
+    &:hover {
+      background: #000;
+    }
   }
 `
 

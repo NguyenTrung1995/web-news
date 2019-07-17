@@ -9,12 +9,18 @@ import { throttle } from 'lodash';
 const Input = styled.input`
   border: none;
   border: 1px solid #000;
-  padding-left: 10px;
+  padding: 10px 20px;
   font-size: 20px;
   margin-bottom: 20px;
-  border-radius: 4px;
+  border-radius: 25px;
   width: 300px;
   outline: none;
+
+  @media only screen and (max-width: 600px) {
+    padding: 5px 20px;
+    font-size: 16px;
+    width: 200px;
+  }
 `
 
 class Home extends React.Component {
