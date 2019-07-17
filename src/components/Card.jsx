@@ -20,7 +20,8 @@ const CardWrapper = styled.a`
     border-bottom-left-radius: 4px;
 
     @media only screen and (max-width: 600px) {
-      width: 100px
+      width: 100px;
+      height: 79px;
     }
   }
 `
